@@ -124,9 +124,9 @@
     const o = (f,d,v,type,end,wet) => tone(f,t,d,v * strength,type,sfxBus,end,wet);
     switch (name) {
       case 'jump': case 'doubleJump': n(.2,.14,850,.5);noise(t+.025,.13,.08,2200,.4);break;
-      case 'slash': n(.18,.38,2700,.45);noise(t+.02,.15,.18,750,.4);break;
+      case 'slash': n(.11,.20,1900,.45);noise(t+.015,.12,.12,650,.4);break;
       case 'special': n(.4,.32,1200,.6);impact(t,.55);tone(82,t,.35,.12,'sawtooth',sfxBus,null,.25,500);break;
-      case 'hit': impact(t,.92*strength);n(.085,.21,2400,.5);duck(t);break;
+      case 'hit': impact(t,1.05*strength);o(115,.19,.3,'sine',44,0);n(.055,.12,1500,.5);noise(t+.025,.23,.17*strength,420,.5);duck(t);break;
       case 'guard': impact(t,.7,true);n(.09,.15,3300,1);break;
       case 'break': impact(t,1.0,true);n(.65,.35,2300,.45);impact(t+.065,.75);duck(t);break;
       case 'smash': impact(t,1.2);impact(t+.045,.55,true);n(.5,.27,600,.45);duck(t);break;
