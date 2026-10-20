@@ -13,3 +13,8 @@
 @media(max-height:680px){.seat{height:112px}.seat canvas{height:120px;width:120px}.seat-caption{margin-top:30px}.seat-caption strong{font-size:20px}}
 
 @media(max-height:680px){.seat canvas{height:110px;width:112px}}
+
+/* Thumb-sized controls, clear separation and safe-area spacing. */
+@media(pointer:coarse),(max-width:850px){.simple-actions{right:max(18px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));gap:18px}.simple-actions #simple-attack{width:88px;height:88px;font-size:21px}.simple-actions .simple-jump{width:78px;height:78px;margin-bottom:68px;font-size:28px}.simple-actions small{font-size:9px}#move-zone{right:48%;overflow:visible}#stick{width:96px;height:96px}#stick-knob{width:50px;height:50px}.simple-actions button{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.move-hint{left:24px;bottom:55px;letter-spacing:0}}
+@media(max-width:370px){.simple-actions{right:12px;gap:12px}.simple-actions #simple-attack{width:80px;height:80px}.simple-actions .simple-jump{width:72px;height:72px}}
+@media(max-height:550px) and (orientation:landscape){.simple-actions{gap:18px;bottom:max(12px,env(safe-area-inset-bottom))}.simple-actions #simple-attack{width:76px;height:76px}.simple-actions .simple-jump{width:70px;height:70px;margin-bottom:47px}}
