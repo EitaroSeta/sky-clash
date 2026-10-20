@@ -21,8 +21,18 @@ const roster={
  martial:{name:'リン',art:'マーシャルアーツ',color:'#f2b929',cloth:'#f2b929',range:103,power:9,cool:.31,speed:6.1,jump:1.05,normal:'掌打',strong:'飛び蹴り',kind:'palm',note:'軽快な移動と素早い掌打。黄色のトレーニングウェア。'},
  judo:{name:'ゴウ',art:'柔道',color:'#2562c3',cloth:'#2562c3',range:60,power:14,cool:.58,speed:4.8,jump:.96,normal:'大外刈り',strong:'背負い投げ',kind:'throw',note:'近距離の投げが強力。溜めると背後へ投げる。青い柔道着。'}
 };
+let selectSeat='p';
 function selectedStyle(cpu=false){const v=$(cpu?'#cpu-character':'#character').value;return roster[v]?v:cpu?'boxing':'karate';}
-function refreshRoster(){const a=roster[selectedStyle()],b=roster[selectedStyle(true)];$('#character-detail').textContent=a.normal+' ／ 長押し：'+a.strong+'。'+a.note;$('#hero-name').textContent=a.name+' / '+a.art;$('#p-name').textContent=a.name;$('#c-name').textContent=b.name;$('#p-avatar').src='fighter-'+selectedStyle()+'.svg';$('#c-avatar').src='fighter-'+selectedStyle(true)+'.svg';$('#p-avatar').alt=a.name+'の肖像';$('#c-avatar').alt=b.name+'の肖像';}
+function refreshRoster(){const a=roster[selectedStyle()],b=roster[selectedStyle(true)];$('#character-detail').textContent=a.normal+' ／ 長押し：'+a.strong+'。'+a.note;$('#hero-name').textContent=a.name+' / '+a.art;$('#p-name').textContent=a.name;$('#c-name').textContent=b.name;$('#p-avatar').src='fighter-'+selectedStyle()+'.svg';$('#c-avatar').src='fighter-'+selectedStyle(true)+'.svg';$('#p-avatar').alt=a.name+'の肖像';$('#c-avatar').alt=b.name+'の肖像';refreshArcade();}
+
+
+function refreshArcade(){
+ for(const seat of ['p','c']){const key=selectedStyle(seat==='c'),f=roster[key];$('#preview-'+seat).src='fighter-'+key+'.svg';$('#preview-'+seat+'-name').textContent=f.name;$('#preview-'+seat+'-art').textContent=f.art;$('#seat-'+seat).setAttribute('aria-pressed',String(selectSeat===seat));}
+ const chosen=selectedStyle(selectSeat==='c'),f=roster[chosen];
+ for(const key of Object.keys(roster)){const el=$('#pick-'+key);el.setAttribute('aria-pressed',String(key===chosen));el.dataset.player=String(key===selectedStyle());el.dataset.cpu=String(key===selectedStyle(true));}
+ $('#selection-prompt').textContent=(selectSeat==='p'?'1P':'CPU')+' のキャラクターを選択';$('#move-style').textContent=f.art;$('#move-normal').textContent='通常：'+f.normal;$('#move-strong').textContent='長押し：'+f.strong;
+}
+function chooseFighter(key){if(!roster[key])return;$(selectSeat==='p'?'#character':'#cpu-character').value=key;refreshRoster();window.SkyAudio?.unlock();sfx('ui');}
 
 function makeFighter(cpu){const style=selectedStyle(cpu);return{style,throwTime:0,x:cpu?810:470,y:475,vx:0,vy:0,face:cpu?-1:1,cpu,damage:0,stocks:3,jumps:0,ground:true,stun:0,inv:0,respawn:0,cool:0,specialCool:0,attackTime:0,attackKind:'',hit:new Set(),guard:false,shield:100,aiWait:0,aiJump:0,recovery:false,walk:0,koFlash:0,ledge:0,ledgeCool:0,drop:0,power:0,attackDir:0,dodge:0,dodgeCool:0,charge:0,charging:false,smash:0};}
 let tutorial=null;
@@ -168,7 +178,7 @@ $('#sound').onclick=()=>{sound=!sound;window.SkyAudio?.setEnabled(sound);if(soun
 const volume=()=>{window.SkyAudio?.setVolumes(Number($('#music-volume').value)/100,Number($('#sfx-volume').value)/100);};
 $('#music-volume').oninput=volume;$('#sfx-volume').oninput=volume;
 volume();
-$('#character').onchange=refreshRoster;$('#cpu-character').onchange=refreshRoster;refreshRoster();
+for(const key of Object.keys(roster))$('#pick-'+key).onclick=()=>chooseFighter(key);for(const seat of ['p','c'])$('#seat-'+seat).onclick=()=>{selectSeat=seat;refreshArcade();sfx('ui');};$('#character').onchange=refreshRoster;$('#cpu-character').onchange=refreshRoster;refreshRoster();
 
 resize();requestAnimationFrame(frame);
 })();
